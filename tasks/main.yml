@@ -13,16 +13,22 @@
 - name: Evaluate OpenSCAP Changes
   ansible.builtin.shell:
     cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results ~/openscap_hardening_results.xml /usr/share/xml/scap/ssg/content/ssg-rhel-dss.xml
-  when: ansible_os_family == "RedHat" and openscap_installed is succeeded
+  when: 
+    - ansible_os_family == "RedHat"
+    - openscap_installed is succeeded
   register: openscap_evaluated
 
 - name: Generate Needed Changes Report
   ansible.builtin.shell:
     cmd: oscap xccdf generate report --output ~/openscap_report.html ~/openscap_hardening_results.xml 
-  when: ansible_os_family == "RedHat" and openscap_evaluated is succeeded
+  when: 
+    - ansible_os_family == "RedHat"
+    - openscap_evaluated is succeeded
   register: openscap_reported
 
 - name: Remediate OpenSCAP Findings
   ansible.builtin.shell:
     cmd: sudo oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis --results ~/openscap_hardening_results.xml --report ~/openscap_report.html /usr/share/xml/scap/ssg/content/ssg-rhel-dss.xml
-  when: ansible_os_family == "RedHat" and openscap_reported is succeeded
+  when:
+    - ansible_os_family == "RedHat"
+    - openscap_reported is succeeded
