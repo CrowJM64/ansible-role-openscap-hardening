@@ -10,11 +10,21 @@
   when: ansible_os_family == "RedHat"
   register: openscap_installed
 
-- name: Evaluate OpenSCAP Changes
+- name: Evaluate OpenSCAP Changes (RHEL10)
   ansible.builtin.shell:
-    cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results /root/openscap_hardening_results.xml /usr/share/xml/scap/ssg/content/ssg-rhel-dss.xml
+    cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results /root/openscap_hardening_results.xml /usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml
   when: 
     - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "10"
+    - openscap_installed is succeeded
+  register: openscap_evaluated
+
+- name: Evaluate OpenSCAP Changes (RHEL9)
+  ansible.builtin.shell:
+    cmd: oscap xccdf eval --profile xccdf_org.ssgproject.content_profile_cis --results /root/openscap_hardening_results.xml /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "9"
     - openscap_installed is succeeded
   register: openscap_evaluated
 
@@ -26,11 +36,20 @@
     - openscap_evaluated is succeeded
   register: openscap_reported
 
-- name: Remediate OpenSCAP Findings
+- name: Remediate OpenSCAP Findings (RHEL10)
   ansible.builtin.shell:
-    cmd: sudo oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis --results /root/openscap_hardening_results.xml --report /root/openscap_report.html /usr/share/xml/scap/ssg/content/ssg-rhel-dss.xml
+    cmd: sudo oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis --results /root/openscap_hardening_results.xml --report /root/openscap_report.html /usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml
   when:
     - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "10"
+    - openscap_reported is succeeded
+
+- name: Remediate OpenSCAP Findings (RHEL9)
+  ansible.builtin.shell:
+    cmd: sudo oscap xccdf eval --remediate --profile xccdf_org.ssgproject.content_profile_cis --results /root/openscap_hardening_results.xml --report /root/openscap_report.html /usr/share/xml/scap/ssg/content/ssg-rhel9-ds.xml
+  when:
+    - ansible_os_family == "RedHat"
+    - ansible_distribution_major_version == "9"
     - openscap_reported is succeeded
 
 - name: OpenSCAP Cleanup
