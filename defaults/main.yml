@@ -1,2 +1,5 @@
 ---
 # defaults file for openscap-hardening
+cis_benchmark: xccdf_org.ssgproject.content_profile_cis # Default CIS Server Level 2 (xccdf_org.ssgproject.content_profile_cis)
+oracle_cis_benchmark: xccdf_org.ssgproject.content_profile_anssi_bp28_intermediary # Default ANSSI-BP-028 Intermediate Level hardening
+report_location: /root/openscap_report.html # Location of final Hardening report. Openable with Lynx.
