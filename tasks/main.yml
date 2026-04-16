@@ -116,6 +116,18 @@
     - openscap_evaluated.rc != 0
     - openscap_evaluated.rc != 2
 
+- name: Evaluate OpenSCAP Changes (Fedora)
+  ansible.builtin.shell:
+    cmd: oscap xccdf eval --profile "{{ cis_benchmark }}" --results /root/openscap_hardening_results.xml /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
+  when:
+    - ansible_distribution == "Fedora"
+    - openscap_installed is succeeded
+  register: openscap_evaluated
+  changed_when: false
+  failed_when:
+    - openscap_evaluated.rc != 0
+    - openscap_evaluated.rc != 2
+
 - name: Evaluate OpenSCAP Changes (RHEL10)
   ansible.builtin.shell:
     cmd: oscap xccdf eval --profile "{{ cis_benchmark }}" --results /root/openscap_hardening_results.xml /usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml
@@ -125,6 +137,7 @@
     - ansible_distribution != "CentOS"
     - ansible_distribution != "OracleLinux"
     - ansible_distribution != "AlmaLinux"
+    - ansible_distribution != "Fedora"
     - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "10"
     - openscap_installed is succeeded
@@ -140,6 +153,9 @@
   when:
     - ansible_distribution != "Rocky"
     - ansible_distribution != "CentOS"
+    - ansible_distribution != "OracleLinux"
+    - ansible_distribution != "AlmaLinux"
+    - ansible_distribution != "Fedora"
     - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "9"
     - openscap_installed is succeeded
@@ -270,6 +286,18 @@
     - openscap_remediated.rc != 0
     - openscap_remediated.rc != 2
 
+- name: Remediate OpenSCAP Findings (Fedora)
+  ansible.builtin.shell:
+    cmd: oscap xccdf eval --remediate --profile "{{ cis_benchmark }}" --results /root/openscap_hardening_results.xml --report "{{ report_location }}" /usr/share/xml/scap/ssg/content/ssg-fedora-ds.xml
+  when:
+    - ansible_distribution == "Fedora"
+    - openscap_installed is succeeded
+  register: openscap_evaluated
+  changed_when: false
+  failed_when:
+    - openscap_evaluated.rc != 0
+    - openscap_evaluated.rc != 2
+
 - name: Remediate OpenSCAP Findings (RHEL10)
   ansible.builtin.shell:
     cmd: oscap xccdf eval --remediate --profile "{{ cis_benchmark }}" --results /root/openscap_hardening_results.xml --report "{{ report_location }}" /usr/share/xml/scap/ssg/content/ssg-rhel10-ds.xml
@@ -278,6 +306,7 @@
     - ansible_distribution != "CentOS"
     - ansible_distribution != "OracleLinux"
     - ansible_distribution != "AlmaLinux"
+    - ansible_distribution != "Fedora"
     - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "10"
     - openscap_reported is succeeded
@@ -295,6 +324,7 @@
     - ansible_distribution != "CentOS"
     - ansible_distribution != "OracleLinux"
     - ansible_distribution != "AlmaLinux"
+    - ansible_distribution != "Fedora"
     - ansible_os_family == "RedHat"
     - ansible_distribution_major_version == "9"
     - openscap_reported is succeeded

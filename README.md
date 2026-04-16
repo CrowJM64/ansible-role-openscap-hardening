@@ -5,12 +5,13 @@
 
 This Ansible role automates hardening of RedHat Distros to the CIS Server Level 2 Benchmark using OpenSCAP:
 
-## Supported Platforms and Derivatives
+## Tested Platforms and Derivatives
 ```yaml
 # RedHat
-Rocky Linux - 9-10
-CentOS Stream - 9-10
-Other RHEL - 9-10
+Rocky Linux - 10/9
+CentOS Stream - 10/9
+Fedora 43/42
+RHEL - 10/9
 ```
 
 ## Example Playbook
